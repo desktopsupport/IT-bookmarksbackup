@@ -1,14 +1,3 @@
-::Name - Restore Script
-::Description - Restores Up favourites, music, signatures, Outlook settings, templates, UI settings, stickynotes, chrome bookmarks, email signature and mapped drives from OneDrive to local machine
-::Inputs - None
-::Outputs - Logs to a restore script and error log on OneDrive
-::Version - 1.4
-::Created By - Andrew Taylor
-::Updates - Initial Update
-::Updated 27-01 - Added error logging and links
-::Updated added XLStart and WordStartup
-
-
 
 ::GET FAVOURITES
 set error="%OneDriveCommercial%\backup\restoreerrorlog.txt" 
