@@ -1,15 +1,3 @@
-::Name - Backup Script
-::Description - Backs Up favourites, music, signatures, Outlook settings, templates, UI settings, stickynotes, chrome bookmarks, email signature and mapped drives from local PC to OneDrive
-::Inputs - None
-::Outputs - Logs to a backup script on OneDrive
-::Version - 1.4
-::Created By - Andrew Taylor @ andrewstaylor.com
-::Updates - Initial Update
-::Updated 13-01-23 - Backing up links files
-::Moved Favourites to resolve issue
-::Updated added XLStart and WordStartup
-::Updated added Start Menu after ASRmageddon
-
 ping 127.0.0.1 -n 10
 
 ::GET DESKTOP
