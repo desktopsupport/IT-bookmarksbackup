@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   Runs a backup script on user login
 .DESCRIPTION
@@ -38,17 +38,17 @@ else {
 }
 
 ##Download Backup Script
-$backupurl="https://opendealerexchange.sharepoint.com/information-Technology/infrastructure/Shared%20Documents/Forms/AllItems.aspx?id=%2Finformation%2DTechnology%2Finfrastructure%2FShared%20Documents%2FDesktop%20OPs%2FScripts%2FUser%20Profile%20Intune%20Backup%2Fbackup%2Ebat&parent=%2Finformation%2DTechnology%2Finfrastructure%2FShared%20Documents%2FDesktop%20OPs%2FScripts%2FUser%20Profile%20Intune%20Backup"
+$backupurl="https://raw.githubusercontent.com/desktopsupport/IT-bookmarksbackup/refs/heads/main/backup.bat"
 $backupscript = "c:\backup-restore\backup.bat"
 Invoke-WebRequest -Uri $backupurl -OutFile $backupscript -UseBasicParsing
 
 ##Download Restore Script
-$restoreurl="https://opendealerexchange.sharepoint.com/information-Technology/infrastructure/Shared%20Documents/Forms/AllItems.aspx?id=%2Finformation%2DTechnology%2Finfrastructure%2FShared%20Documents%2FDesktop%20OPs%2FScripts%2FUser%20Profile%20Intune%20Backup%2FNEWrestore%2Ebat&parent=%2Finformation%2DTechnology%2Finfrastructure%2FShared%20Documents%2FDesktop%20OPs%2FScripts%2FUser%20Profile%20Intune%20Backup"
-$restorescript = "c:\backup-restore\NEWrestore.bat"
+$restoreurl="https://raw.githubusercontent.com/desktopsupport/IT-bookmarksbackup/refs/heads/main/NEWrestore.bat"
+$restorescript = "c:\backup-restore\Newrestore.bat"
 Invoke-WebRequest -Uri $restoreurl -OutFile $restorescript -UseBasicParsing
 
 ##Download Silent Launch Script
-$launchurl="https://opendealerexchange.sharepoint.com/:u:/g/information-Technology/infrastructure/EUPrcvNmtVJLsATzUTAqQbkBnmGGisTextJcdEomqG2OVA?e=F37cza"
+$launchurl="https://raw.githubusercontent.com/desktopsupport/IT-bookmarksbackup/refs/heads/main/run-invisible.vbs"
 $launchscript = "c:\backup-restore\run-invisible.vbs"
 Invoke-WebRequest -Uri $launchurl -OutFile $launchscript -UseBasicParsing
 
@@ -69,16 +69,18 @@ $taskName = "UserBackup"
 #Describe it
 $description = "Backs up User profile to OneDrive"
 
-# Create the scheduled task with highest privileges
-$principal = New-ScheduledTaskPrincipal -UserId (Get-CimInstance –ClassName Win32_ComputerSystem | Select-Object -expand UserName) -RunLevel Highest
+#Create the scheduled task with highest privileges
+$principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+
+#Define settings
+$Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
 
 # Register it
 Register-ScheduledTask `
     -TaskName $taskName `
     -Action $taskAction `
     -Trigger $taskTrigger `
-    -Description $description `
-    -Principal $principal
+    -Description $description 
 # SIG # Begin signature block
 # MIIoGQYJKoZIhvcNAQcCoIIoCjCCKAYCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
@@ -192,8 +194,7 @@ Register-ScheduledTask `
 # Z2lDZXJ0LCBJbmMuMSAwHgYDVQQDExdEaWdpQ2VydCBUaW1lc3RhbXAgMjAyMzCC
 # AiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAKNTRYcdg45brD5UsyPgz5/X
 # 5dLnXaEOCdwvSKOXejsqnGfcYhVYwamTEafNqrJq3RApih5iY2nTWJw1cb86l+uU
-# UI8cIOrHmjsvlmbjaedp/lvD1isgHMGXlLSlUIHyz8sHpjBoyoNC2vx/CSSUpIIa
-# 2mq62DvKXd4ZGIX7ReoNYWyd/nFexAaaPPDFLnkPG2ZS48jWPl/aQ9OE9dDH9kgt
+# UI8cIOrHmjsvlmbjaedp/lvD1isgHMGXlLSlUIHyz8sHpjBoyoNC2vx/CDH9kgt
 # XkV1lnX+3RChG4PBuOZSlbVH13gpOWvgeFmX40QrStWVzu8IF+qCZE3/I+PKhu60
 # pCFkcOvV5aDaY7Mu6QXuqvYk9R28mxyyt1/f8O52fTGZZUdVnUokL6wrl76f5P17
 # cz4y7lI0+9S769SgLDSb495uZBkHNwGRDxy1Uc2qTGaDiGhiu7xBG3gZbeTZD+BY
@@ -207,7 +208,8 @@ Register-ScheduledTask `
 # II+eyG8wHQYDVR0OBBYEFKW27xPn783QZKHVVqllMaPe1eNJMFoGA1UdHwRTMFEw
 # T6BNoEuGSWh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFRydXN0ZWRH
 # NFJTQTQwOTZTSEEyNTZUaW1lU3RhbXBpbmdDQS5jcmwwgZAGCCsGAQUFBwEBBIGD
-# MIGAMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wWAYIKwYB
+# MIGAMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaSSUpIIa
+# 2mq62DvKXd4ZGIX7ReoNYWyd/nFexAaaPPDFLnkPG2ZS48jWPl/aQ9OE9dWdpY2VydC5jb20wWAYIKwYB
 # BQUHMAKGTGh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFRydXN0
 # ZWRHNFJTQTQwOTZTSEEyNTZUaW1lU3RhbXBpbmdDQS5jcnQwDQYJKoZIhvcNAQEL
 # BQADggIBAIEa1t6gqbWYF7xwjU+KPGic2CX/yyzkzepdIpLsjCICqbjPgKjZ5+PF
