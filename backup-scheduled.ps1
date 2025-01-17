@@ -48,7 +48,7 @@ $taskName = "UserBackup"
 $description = "Backs up User profile to OneDrive"
 
 #Create the scheduled task with highest privileges
-$principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+$principal = New-ScheduledTaskPrincipal -UserId "BUILTIN\Users" -LogonType Interactive -RunLevel Highest
 
 #Define settings
 $Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
