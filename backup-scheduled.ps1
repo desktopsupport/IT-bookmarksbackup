@@ -1,25 +1,3 @@
-﻿<#
-.SYNOPSIS
-  Runs a backup script on user login
-.DESCRIPTION
-Backs up all key user data to Onedrive
-
-.INPUTS
-None required
-.OUTPUTS
-Within Azure
-.NOTES
-  Version:        1.1
-  Author:         Andrew Taylor
-  Twitter:        @AndrewTaylor_2
-  WWW:            andrewstaylor.com
-  Creation Date:  21/08/2021
-  Purpose/Change: Initial script development
-  
-.EXAMPLE
-N/A
-#>
-
 #Create path for files
 $DirectoryToCreate = "c:\backup-restore"
 if (-not (Test-Path -LiteralPath $DirectoryToCreate)) {
