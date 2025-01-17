@@ -51,14 +51,10 @@ $description = "Backs up User profile to OneDrive"
 $principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
 
 #Define settings
-$Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+$Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
 
 # Register it
-Register-ScheduledTask `
-    -TaskName $taskName `
-    -Action $taskAction `
-    -Trigger $taskTrigger `
-    -Description $description 
+Register-ScheduledTask -Action $taskaction -Trigger $tasktrigger -Principal $principal -Settings $settings -TaskName $taskName -Description $description
 # SIG # Begin signature block
 # MIIoGQYJKoZIhvcNAQcCoIIoCjCCKAYCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
