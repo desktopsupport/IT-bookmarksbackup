@@ -33,28 +33,20 @@ Invoke-WebRequest -Uri $launchurl -OutFile $launchscript -UseBasicParsing
 
 
 ##Create scheduled task
-# Create a new task action
-$taskAction = New-ScheduledTaskAction -Execute 'c:\backup-restore\run-invisible.vbs' 
+try {
+# Remove existing task if it exists
+    Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue
 
-##Create Trigger (login)
-$taskTrigger = New-ScheduledTaskTrigger -AtLogOn
+    $action = New-ScheduledTaskAction -Execute 'c:\backup-restore\run-invisible.vbs' -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command {Start-Process -FilePath 'powershell.exe' -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File \""run-invisible.vbs\"" -WindowStyle Hidden}"
+    $trigger = New-ScheduledTaskTrigger -Daily -At "16:00"
+    $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType interactive
+    $settings = New-ScheduledTaskSettingsSet -Hidden -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
 
-# Register the new PowerShell scheduled task
-
-#Name it
-$taskName = "UserBackup"
-
-#Describe it
-$description = "Backs up User profile to OneDrive"
-
-#Create the scheduled task with highest privileges
-$principal = New-ScheduledTaskPrincipal -UserId "BUILTIN\Users" -LogonType Interactive -RunLevel Highest
-
-#Define settings
-$Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
-
-# Register it
-Register-ScheduledTask -Action $taskaction -Trigger $tasktrigger -Principal $principal -Settings $settings -TaskName $taskName -Description $description
+    Register-ScheduledTask -Action $action -Trigger $trigger -Principal $principal -Settings $settings -TaskName "Browser_Data_Outlook_Backup" -Description "This task backs up outlook signatures and browser bookmarks and passwords."
+    Write-Output "Scheduled Task created successfully."
+} catch {
+    Write-Output "An error occurred: $_"
+}
 # SIG # Begin signature block
 # MIIoGQYJKoZIhvcNAQcCoIIoCjCCKAYCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
