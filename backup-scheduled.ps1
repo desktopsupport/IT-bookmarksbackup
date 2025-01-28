@@ -35,9 +35,9 @@ Invoke-WebRequest -Uri $launchurl -OutFile $launchscript -UseBasicParsing
 ##Create scheduled task
 try {
 # Remove existing task if it exists
-    Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue
+    Unregister-ScheduledTask -TaskName "Browser_Data_Outlook_Backup" -Confirm:$false -ErrorAction SilentlyContinue
 
-    $action = New-ScheduledTaskAction -Execute 'c:\backup-restore\run-invisible.vbs' -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command {Start-Process -FilePath 'powershell.exe' -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File \""run-invisible.vbs\"" -WindowStyle Hidden}"
+    $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-WindowStyle Hidden -File "c:\backup-restore\run-invisible.vbs"'
     $trigger = New-ScheduledTaskTrigger -Daily -At "16:00"
     $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType interactive
     $settings = New-ScheduledTaskSettingsSet -Hidden -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
