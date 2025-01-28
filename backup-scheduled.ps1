@@ -37,7 +37,7 @@ try {
 # Remove existing task if it exists
     Unregister-ScheduledTask -TaskName "Browser_Data_Outlook_Backup" -Confirm:$false -ErrorAction SilentlyContinue
 
-    $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-WindowStyle Hidden -File "c:\backup-restore\run-invisible.vbs"'
+    $action = New-ScheduledTaskAction -Execute 'wscript.exe' -Argument 'C:\backup-restore\run-invisible.vbs //B //Nologo'
     $trigger = New-ScheduledTaskTrigger -Daily -At "16:00"
     $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType interactive
     $settings = New-ScheduledTaskSettingsSet -Hidden -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
